@@ -2,12 +2,14 @@
 <html>
 <head>
 	<title>DEMO</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css" />
+	<link rel="stylesheet" href="css/main.css">
 </head>
 <body>
 	<div id="app">
 		<form id="bellForm">
-			<p>播放音频风格</p>
+			<p>音频风格</p>
 			<div style="margin: 10px 5px 15px">
 				<input type="radio" id="oscTypeSine" name="oscType" value="sine" checked>
 				<label for="oscTypeSine">sine</label>
@@ -18,9 +20,9 @@
 				<input type="radio" id="oscTypeSawtooth" name="oscType" value="sawtooth">
 				<label for="oscTypeSawtooth">sawtooth</label>
 			</div>
-			<textarea id="sheetMusic" cols="50" rows="10">C4 D4 E4</textarea>
+			<textarea id="sheetMusic">C4 D4 E4</textarea>
 			<button type="submit">Play</button>
-			<section>
+			<section class="comment">
 				支持音名
 				C1 - C8 <br>
 				升调支持写法 C#1 C♯1 <br>
@@ -31,8 +33,8 @@
 		</form>
 	</div>
 	<script type="module">
-		import { playAudio } from './piano.js'
-		import defaultNote from './这一生关于你的风景.js'
+		import { playAudio } from './js/piano.js'
+		import defaultNote from './sheet/这一生关于你的风景.js'
 
 		const $ = document.querySelector.bind(document)
 

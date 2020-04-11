@@ -1,0 +1,27 @@
+* {
+  box-sizing: border-box;
+}
+
+button {
+  border: 0;
+  background: #ccc;
+  padding: 5px 8px;
+}
+button:active {
+  background: #999;
+  transform: translate(1px, 1px);
+}
+
+textarea {
+  max-height: 60vh;
+  min-height: 35vh;
+  width: 100%;
+  border: 1px solid #ccc;
+}
+
+.comment {
+  margin: 5px 3px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #999;
+}

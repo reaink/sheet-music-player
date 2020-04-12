@@ -6,6 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css" />
 	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="css/e-editor.css">
 </head>
 <body>
 	<div id="app">
@@ -20,17 +21,20 @@
 				</select>
 				<span>切换曲谱：</span>
 				<select name="sheetName" id="sheetNameSelect">
+					<option value="" selected>默认</option>
 					<option value="zhe-yi-sheng-guan-yu-ni-de-feng-jing">这一生关于你的风景</option>
 					<option value="duan-qiao-can-xue">断桥残雪</option>
 				</select>
 			</div>
-			<textarea id="sheetMusic">C4D4E4F4G.4A#4B4-C5D5E5F5G5A5B5</textarea>
+			<div class="e-editor" id="sheetMusic">C4D4E4F4G.4A#4B4-C5D5E5F5G5A5B5</div>
 			<div class="control-box">
-				<button type="submit">Play</button>
+				<button type="submit">播放</button>
+				<button id="stopBtn">停止</button>
 			</div>
 			<section class="comment">
 				支持音名
-				C1 - C8 <br>
+				C0 C2...C8 <br> 
+				D0 E1...B8 <br>
 				升调支持写法 C#1 C♯1 <br>
 				降调支持写法 D.1 D♭1 <br>
 				间隔时间时长用“空格”或“-”计算
@@ -38,12 +42,15 @@
 		</form>
 	</div>
 	<script type="module">
-		import { playAudio } from './js/piano.js'
+		import { playAudio, stopAudio } from './js/piano.js'
+
+		import EEditor from './js/e-editor.js'
 
 		const $ = document.querySelector.bind(document)
 
 		const bellForm = $('#bellForm')
 		const sheetNameSelect = $('#sheetNameSelect')
+		const stopBtn = $('#stopBtn')
 		let sheetMusic = ''
 
 		addPlayEvent()
@@ -51,25 +58,31 @@
 		function addPlayEvent () {
 			bellForm.addEventListener('submit', playEvent)
 			sheetNameSelect.addEventListener('change', changeSheet)
+			stopBtn.addEventListener('click', PauseEvent)
 			changeSheet()
 		}
 
 		function changeSheet () {
 			let selectedValue = sheetNameSelect.options[sheetNameSelect.selectedIndex].value
 			requireSheet(selectedValue)
+
+			EEditor.init('#sheetMusic')
 		}
 
 		async function requireSheet (name) {
 			try {
+				if (!name) return
 				let sheetData = await import(`./sheet/${name}.js`)
-				$('#sheetMusic').value = sheetData.default.trim()
+				$('#sheetMusic').innerText = sheetData.default.trim()
+
+				EEditor.init('#sheetMusic')
 			} catch (err) {
 				alert(err)
 			}
 		}
 
 		function playEvent (ev) {
-			sheetMusic = $('#sheetMusic').value
+			sheetMusic = $('#sheetMusic').innerText
 
 			let formData = new FormData(bellForm)
 			let oscType = [...formData][0][1]
@@ -77,6 +90,10 @@
 			playAudio(sheetMusic, oscType)
 
   		ev.preventDefault()
+		}
+
+		function PauseEvent () {
+			stopAudio()
 		}
 
 	</script>

@@ -27,6 +27,7 @@ function translateNote (sheetMusic, playTime, oscType, interval = 500) {
       for (let it of matched) {
         let [mul] = it.match(/\d/)
         // | 为防替换错误字符 ,为转换数组字符
+        // console.log(it, mul, computedNoteMul(frequency, mul))
         sheetMusic = sheetMusic.replace(it, '|' + computedNoteMul(frequency, mul) + ',')
       }
     }
@@ -39,7 +40,7 @@ function translateNote (sheetMusic, playTime, oscType, interval = 500) {
     if (!val) sheetMusic[idx] = "0"
   })
 
-  console.log(sheetMusic)
+  // console.log(sheetMusic)
 
   playTimer = setInterval(playAudioRing.bind(document, sheetMusic, playTime, oscType), interval)
 }
@@ -60,28 +61,35 @@ function computedNoteMul (fre, mul) {
   let nmul = 'n' + mul
 
   let scale = {
-    n0: 2/2/2/2,
-    n1: 2/2/2,
-    n2: 2/2,
-    n3: 2,
-    n5: 2,
-    n6: 2*2,
-    n7: 2*2*2,
-    n8: 2*2*2*2
+    n0: val => val/2/2/2/2,
+    n1: val => val/2/2/2,
+    n2: val => val/2/2,
+    n3: val => val/2,
+    n5: val => val*2,
+    n6: val => val*2*2,
+    n7: val => val*2*2*2,
+    n8: val => val*2*2*2*2
   }
 
-  return mul < 4 ? fre / scale[nmul] : mul > 4 ? fre * scale[nmul] : fre
+  var getScale = () => +mul !== 4 ? scale[nmul](fre) : fre
+
+  return getScale()
 }
 
 export function playAudio (sheetMusic, oscType, interval) {
   sheetMusic = sheetMusic.trim()
   
   if (playTimer) {
-    initPlayConf()
+    stopAudio()
   }
   // let interval = 500
   /// ms
   let playTime = 1
   /// s
   translateNote(sheetMusic, playTime, oscType, interval)
+}
+
+export function stopAudio () {
+  initPlayConf()
+  location.reload()
 }

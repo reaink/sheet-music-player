@@ -2,6 +2,8 @@
   box-sizing: border-box;
 }
 
+input, button, select, textarea, .e-editor{outline:none}
+
 button {
   border: 0;
   background: #ccc;
@@ -20,14 +22,7 @@ select {
   margin: 5px;
 }
 
-textarea {
-  margin: 5px 0;
-  padding: 3px;
-  max-height: 60vh;
-  min-height: 35vh;
-  width: 100%;
-  border: 1px solid #ccc;
-}
+/* #sheetMusic { } */
 
 .comment {
   margin: 5px 3px;

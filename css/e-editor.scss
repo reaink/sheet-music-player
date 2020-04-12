@@ -6,6 +6,13 @@
   width: 100%;
   border-radius: 5px;
   border: 1px solid #ccc;
+  .s-n {
+    margin: 0 2px;
+    padding: 0 2px;
+    border-radius: 3px;
+    line-height: 1.5;
+    color: white;
+  }
 }
 
 .e-editor:focus {
@@ -13,25 +20,27 @@
 }
 
 $sheetList: c, d, e, f, g ,a, b;
+$sheetLen: length($sheetList);
 
 $main-s-c: #325f58;
-@for $idx from 0 through 8 {
-  @for $i from 1 through length($sheetList) {
-    $c: nth($sheetList, $i);
-    .s-n[data-sheet='#{$c + $idx}'] {
-      background-color: lighten($main-s-c, $idx / 8 * 80 + 0%);
+@each $i in $sheetList {
+  @for $idx from 0 through 8 {
+    $colorWeight: $idx / 8 * 100 + 0%;
+    $snSheet: mix(#f00, #00f, $colorWeight);
+    .s-n[data-sheet='#{$i + $idx}'] {
+      background-color: $snSheet;
     }
-    .s-n[data-sheet='#{$c + "#" + $idx}'] {
-      background-color: lighten($main-s-c, $idx / 8 * 80 + 5 + 0%);
+    .s-n[data-sheet='#{$i + "#" + $idx}'] {
+      background-color: $snSheet
     }
-    .s-n[data-sheet='#{$c + "♯" + $idx}'] {
-      background-color: lighten($main-s-c, $idx / 8 * 80 + 5 + 0%);
+    .s-n[data-sheet='#{$i + "♯" + $idx}'] {
+      background-color: $snSheet
     }
-    .s-n[data-sheet='#{$c + "." + $idx}'] {
-      background-color: lighten($main-s-c, $idx / 8 * 80 + 0%);
+    .s-n[data-sheet='#{$i + "." + $idx}'] {
+      background-color: $snSheet
     }
-    .s-n[data-sheet='#{$c + "♭" + $idx}'] {
-      background-color: lighten($main-s-c, $idx / 8 * 80 + 0%);
+    .s-n[data-sheet='#{$i + "♭" + $idx}'] {
+      background-color: $snSheet
     }
   }
 }

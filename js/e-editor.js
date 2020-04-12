@@ -43,14 +43,12 @@ export default {
     this.__init()
   },
   __init () {
-    console.dir(this.editor)
     this.editor.setAttribute('contentEditable', true)
     this.editor.addEventListener('input', throttle(this.runfmt.bind(this), 800))
 
     this.runfmt()
   },
   runfmt () {
-    console.log('run')
     var selection = window.getSelection();
     var range = document.createRange();
 
@@ -60,7 +58,7 @@ export default {
     let sheetMusic = this.editor.innerText
     
     for (let note of Object.keys(noteData)) {
-      let reg = new RegExp(note+'[#♯\.♭]?\\d', 'g')
+      let reg = new RegExp(note+'[#♯\.♭]?\\d(?!</)', 'g')
       let matched = sheetMusic.match(reg)
       if (matched) {
         for (let it of matched) {
@@ -69,12 +67,15 @@ export default {
       }
     }
 
-    keepLastIndex(this.editor)
+    this.editor.innerHTML += '<span></span>'
   },
   setSheetClass (note) {
     let reg = new RegExp(`${note}(?!</)`, 'g')
-    this.editor.innerHTML =
-      this.editor.innerHTML.replace(reg, `<span class="s-n" data-sheet="${note.toLowerCase()}">${note}</span>`)
+    if (this.editor.innerHTML.match(reg)) {
+      this.editor.innerHTML =
+        this.editor.innerHTML.replace(reg, `<span class="s-n" data-sheet="${note.toLowerCase()}">${note}</span>`)
+      
+    }
   },
   validEditor () {
     return this.editor.contentEditable

@@ -80,7 +80,7 @@ export function playAudio (sheetMusic, oscType, interval) {
   sheetMusic = sheetMusic.trim()
   
   if (playTimer) {
-    stopAudio()
+    initPlayConf()
   }
   // let interval = 500
   /// ms

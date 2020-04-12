@@ -1,5 +1,7 @@
 /**
- * 叮咚铃声
+ * 读取频率按设定时长播放音频
+ * @author real <nmlixa@163.com>
+ * @date 2020/04/12 08:44:30
  * @author yutent<yutent@doui.cc>
  * @date 2020/02/26 14:57:44
  */
@@ -18,13 +20,13 @@ export default {
     this.oscillator.type = type
   },
 
-  // 响铃
+  // 播放
   ring(frequency, playTime, type) {
     if (!frequency) return
     this.__play(parseFloat(frequency), playTime, type)
   },
 
-  __play(frequency, playTime, type) {
+  __play(frequency, playTime = 1, type) {
     this.__init__(type)
     this.oscillator.frequency.value = frequency
     this.gain.gain.setValueAtTime(0, AC.currentTime)

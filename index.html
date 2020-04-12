@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset='utf-8'>
 	<title>sheet-music-player</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css" />
@@ -9,45 +10,61 @@
 <body>
 	<div id="app">
 		<form id="bellForm">
-			<p>音频风格</p>
-			<div style="margin: 10px 5px 15px">
-				<input type="radio" id="oscTypeSine" name="oscType" value="sine" checked>
-				<label for="oscTypeSine">sine</label>
-				<input type="radio" id="oscTypeSquare" name="oscType" value="square">
-				<label for="oscTypeSquare">square</label>
-				<input type="radio" id="oscTypeTriangle" name="oscType" value="triangle">
-				<label for="oscTypeTriangle">triangle</label>
-				<input type="radio" id="oscTypeSawtooth" name="oscType" value="sawtooth">
-				<label for="oscTypeSawtooth">sawtooth</label>
+			<div class="control-box">
+				<span>切换风格：</span>
+				<select name="oscType" id="oscTypeSelect">
+					<option value="sine">sine</option>
+					<option value="square">square</option>
+					<option value="triangle">triangle</option>
+					<option value="sawtooth">sawtooth</option>
+				</select>
+				<span>切换曲谱：</span>
+				<select name="sheetName" id="sheetNameSelect">
+					<option value="zhe-yi-sheng-guan-yu-ni-de-feng-jing">这一生关于你的风景</option>
+					<option value="duan-qiao-can-xue">断桥残雪</option>
+				</select>
 			</div>
-			<textarea id="sheetMusic">C4 D4 E4</textarea>
-			<button type="submit">Play</button>
+			<textarea id="sheetMusic">C4D4E4F4G.4A#4B4-C5D5E5F5G5A5B5</textarea>
+			<div class="control-box">
+				<button type="submit">Play</button>
+			</div>
 			<section class="comment">
 				支持音名
 				C1 - C8 <br>
 				升调支持写法 C#1 C♯1 <br>
 				降调支持写法 D.1 D♭1 <br>
-				间隔时间时长用“空格”或“-”计算 <br> 
-				注意：每个音必须用 空格隔开
+				间隔时间时长用“空格”或“-”计算
 			</section>
 		</form>
 	</div>
 	<script type="module">
 		import { playAudio } from './js/piano.js'
-		import defaultNote from './sheet/这一生关于你的风景.js'
 
 		const $ = document.querySelector.bind(document)
 
 		const bellForm = $('#bellForm')
+		const sheetNameSelect = $('#sheetNameSelect')
 		let sheetMusic = ''
 
 		addPlayEvent()
 
 		function addPlayEvent () {
 			bellForm.addEventListener('submit', playEvent)
+			sheetNameSelect.addEventListener('change', changeSheet)
+			changeSheet()
+		}
 
-			if (defaultNote) {
-				$('#sheetMusic').value = defaultNote.trim()
+		function changeSheet () {
+			let selectedValue = sheetNameSelect.options[sheetNameSelect.selectedIndex].value
+			requireSheet(selectedValue)
+		}
+
+		async function requireSheet (name) {
+			try {
+				let sheetData = await import(`./sheet/${name}.js`)
+				$('#sheetMusic').value = sheetData.default.trim()
+			} catch (err) {
+				alert(err)
 			}
 		}
 

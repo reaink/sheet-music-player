@@ -4,7 +4,7 @@
  * @date 2020-4-12 06:06:06
  */
 
-import AC from './bell.js'
+import AC from './audio-context.js'
 import noteData from './note-data.js'
 
 let playTimer = null
@@ -21,22 +21,25 @@ function translateNote (sheetMusic, playTime, oscType, interval = 500) {
 
   // 替换所有音符为频率
   for (let [note, frequency] of Object.entries(noteData)) {
-    let reg = new RegExp(note+'\\d', 'g')
+    let reg = new RegExp(note+'[#♯\.♭]?\\d', 'g')
     let matched = sheetMusic.match(reg)
     if (matched) {
       for (let it of matched) {
         let [mul] = it.match(/\d/)
-        sheetMusic = sheetMusic.replace(it, computedNoteMul(frequency, mul))
+        // | 为防替换错误字符 ,为转换数组字符
+        sheetMusic = sheetMusic.replace(it, '|' + computedNoteMul(frequency, mul) + ',')
       }
     }
   }
-
-  sheetMusic = sheetMusic.split(' ')
-
+  // 清除防替换频率保护字符
+  sheetMusic = sheetMusic.replace(/\|/g, '')
+  sheetMusic = sheetMusic.split(/\s|,|-/)
   // 转换正确的空音
   sheetMusic.forEach((val, idx) => {
     if (!val) sheetMusic[idx] = "0"
   })
+
+  console.log(sheetMusic)
 
   playTimer = setInterval(playAudioRing.bind(document, sheetMusic, playTime, oscType), interval)
 }

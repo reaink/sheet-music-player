@@ -7,6 +7,9 @@
 'use strict'
 
 import noteData from './note-data.js'
+import eepInputSheet from './e-editor-plugin-input-sheet.js'
+
+const $ = document.querySelector.bind(document)
 
 function throttle(fn, gapTime) {
   let _lastTime = null;
@@ -20,22 +23,6 @@ function throttle(fn, gapTime) {
   }
 }
 
-function keepLastIndex(obj) {
-  if (window.getSelection) {//ie11 10 9 ff safari
-      obj.focus(); //解决ff不获取焦点无法定位问题
-      var range = window.getSelection();//创建range
-      range.selectAllChildren(obj);//range 选择obj下所有子内容
-      range.collapseToEnd();//光标移至最后
-  }
-  else if (document.selection) {//ie10 9 8 7 6 5
-      var range = document.selection.createRange();//创建选择对象
-      //var range = document.body.createTextRange();
-      range.moveToElementText(obj);//range定位到obj
-      range.collapse(false);//光标移至最后
-      range.select();
-  }
-}
-
 export default {
   init (node) {
     this.editor = document.querySelector(node)
@@ -43,10 +30,17 @@ export default {
     this.__init()
   },
   __init () {
-    this.editor.setAttribute('contentEditable', true)
-    this.editor.addEventListener('input', throttle(this.runfmt.bind(this), 800))
+    // this.editor.setAttribute('contentEditable', true)
+    this.editor.addEventListener('keyup', throttle(this.runfmt.bind(this), 800))
 
     this.runfmt()
+
+    this.insPlgn()
+  },
+  insPlgn () {
+    this.extendsInstall(eepInputSheet({
+      node: $('#input-sheet')
+    }))
   },
   runfmt () {
     var selection = window.getSelection();
@@ -54,27 +48,45 @@ export default {
 
     this.validEditor() && this.fmtNote(range, selection)
   },
-  fmtNote (range) {
+  fmtNote () {
     let sheetMusic = this.editor.innerText
     
+    let muteReg = /(?<![n"])(\s|\-)(?=\S)/g
+    let muteRegMatched = sheetMusic.match(muteReg)
+
+    // set noteClass
     for (let note of Object.keys(noteData)) {
       let reg = new RegExp(note+'[#♯\.♭]?\\d(?!</)', 'g')
       let matched = sheetMusic.match(reg)
       if (matched) {
         for (let it of matched) {
-          this.setSheetClass(it, sheetMusic)
+          this.setSheetClass(it)
         }
       }
     }
 
-    this.editor.innerHTML += '<span></span>'
+    // set muteClass
+    if (muteRegMatched) {
+      for (let it of muteRegMatched) {
+        this.setMuteClass(it)
+      }
+    }
   },
   setSheetClass (note) {
     let reg = new RegExp(`${note}(?!</)`, 'g')
+    
     if (this.editor.innerHTML.match(reg)) {
       this.editor.innerHTML =
         this.editor.innerHTML.replace(reg, `<span class="s-n" data-sheet="${note.toLowerCase()}">${note}</span>`)
-      
+    }
+  },
+  setMuteClass (note) {
+    let regNote = note === '-' ? note : '\s'
+    let attrNote = note === '-' ? 'dash' : 'space'
+    let reg = new RegExp(`(?<![n"])\\${regNote}(?!(\\<\\/|["dnsc]))`, 'g')
+    if (this.editor.innerHTML.match(reg)) {
+      this.editor.innerHTML =
+        this.editor.innerHTML.replace(reg, `<span class="s-n s-m" data-sheet="${attrNote}">-</span>`)
     }
   },
   validEditor () {
@@ -90,5 +102,8 @@ export default {
 
     getSelection().empty()
     this.editor.focus()
+  },
+  extendsInstall ({ install }) {
+    install(this)
   }
 }

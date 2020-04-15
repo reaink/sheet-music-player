@@ -6,13 +6,14 @@
   width: 100%;
   border-radius: 5px;
   border: 1px solid #ccc;
-  .s-n {
-    margin: 0 2px;
-    padding: 0 2px;
-    border-radius: 3px;
-    line-height: 1.5;
-    color: white;
-  }
+}
+
+.s-n {
+  margin: 0 2px;
+  padding: 0 2px;
+  border-radius: 3px;
+  line-height: 1.5;
+  color: white;
 }
 
 .e-editor:focus {
@@ -44,3 +45,20 @@ $main-s-c: #325f58;
     }
   }
 }
+
+
+$muteList: dash, space;
+$muteColor: #666;
+
+.s-m {
+  display: inline-block;
+  text-align: center;
+  width: 14px;
+  background-color: $muteColor;
+}
+
+// @each $it in $muteList {
+//   .s-n[data-sheet='mute-#{$it}'] {
+//     background-color: $muteColor;
+//   }
+// }

@@ -1,0 +1,3 @@
+export default `
+C4C4G4G4A4A4G4-F4 F4 F4 F4F4E4E4D4D4C4
+`

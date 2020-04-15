@@ -26,7 +26,7 @@
 					<option value="duan-qiao-can-xue">断桥残雪</option>
 				</select>
 			</div>
-			<div class="e-editor" id="sheetMusic">C4C4G4G4A4A4G4-F4 F4 F4 F4F4E4E4D4D4C4</div>
+			<div class="e-editor" id="sheetMusic">C4C4G4G4A4A4G4-F4 F4 F4F4E4E4D4D4C4</div>
 			<div class="control-box">
 				<div style="margin-bottom: 3px;">
 					<button id="backBtn" class="s-n" type="button">退格</button>
@@ -68,7 +68,7 @@
 			bellForm.addEventListener('submit', playEvent)
 			sheetNameSelect.addEventListener('change', changeSheet)
 			stopBtn.addEventListener('click', stopEvent)
-			backBtn.addEventListener('click', backSpace)
+			backBtn.addEventListener('click', () => backSpace('last'))
 			clearBtn.addEventListener('click', () => backSpace('clear'))
 
 			changeSheet()
@@ -95,9 +95,8 @@
 
 		function backSpace (step) {
 			let editor = $('#sheetMusic')
-			if (!step) {
-				let lastChild = editor.children[editor.children.length - 1]
-				lastChild && editor.removeChild(lastChild)
+			if (step === 'last') {
+				editor.lastChild && editor.removeChild(editor.lastChild)
 			} else if (step === 'clear') {
 				editor.innerHTML = ''
 			}
@@ -115,7 +114,7 @@
 		}
 
 		function stopEvent () {
-			stopAudio()
+			location.reload()
 		}
 
 	</script>

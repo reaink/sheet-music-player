@@ -12,7 +12,7 @@ let playIdx = 0
 
 function initPlayConf () {
   playIdx = 0
-  clearInterval(playTimer)
+  playTimer && clearInterval(playTimer)
 }
 
 function translateNote (sheetMusic, playTime, oscType, interval = 500) {
@@ -91,5 +91,4 @@ export function playAudio (sheetMusic, oscType, interval) {
 
 export function stopAudio () {
   initPlayConf()
-  location.reload()
 }

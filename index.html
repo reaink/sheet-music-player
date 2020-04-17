@@ -11,20 +11,24 @@
 <body>
 	<div id="app">
 		<form id="bellForm">
-			<div class="control-box">
-				<span>切换风格：</span>
-				<select name="oscType" id="oscTypeSelect">
-					<option value="sine">sine</option>
-					<option value="square">square</option>
-					<option value="triangle">triangle</option>
-					<option value="sawtooth">sawtooth</option>
-				</select>
-				<span>切换曲谱：</span>
-				<select name="sheetName" id="sheetNameSelect">
-					<option value="default" selected>默认</option>
-					<option value="zhe-yi-sheng-guan-yu-ni-de-feng-jing">这一生关于你的风景</option>
-					<option value="duan-qiao-can-xue">断桥残雪</option>
-				</select>
+			<div class="control-box d-flex">
+				<div>
+					<span>切换风格：</span>
+					<select name="oscType" id="oscTypeSelect">
+						<option value="sine">sine</option>
+						<option value="square">square</option>
+						<option value="triangle">triangle</option>
+						<option value="sawtooth">sawtooth</option>
+					</select>
+				</div>
+				<div class="ml-1">
+					<span>切换曲谱：</span>
+					<select name="sheetName" id="sheetNameSelect">
+						<option value="default" selected>默认</option>
+						<option value="zhe-yi-sheng-guan-yu-ni-de-feng-jing">这一生关于你的风景</option>
+						<option value="duan-qiao-can-xue">断桥残雪</option>
+					</select>
+				</div>
 			</div>
 			<div class="e-editor" id="sheetMusic">C4C4G4G4A4A4G4-F4 F4 F4F4E4E4D4D4C4</div>
 			<div class="control-box">
@@ -55,9 +59,11 @@
 
 		const bellForm = $('#bellForm')
 		const sheetNameSelect = $('#sheetNameSelect')
+		const oscTypeSelect = $('#oscTypeSelect')
 		const stopBtn = $('#stopBtn')
 		const backBtn = $('#backBtn')
 		const clearBtn = $('#clearBtn')
+		const editor = $('#sheetMusic')
 		let sheetMusic = ''
 
 		addPlayEvent()
@@ -65,6 +71,7 @@
 		function addPlayEvent () {
 			bellForm.addEventListener('submit', playEvent)
 			sheetNameSelect.addEventListener('change', changeSheet)
+			oscTypeSelect.addEventListener('change', changeOscStyle)
 			stopBtn.addEventListener('click', stopEvent)
 			backBtn.addEventListener('click', () => backSpace('last'))
 			clearBtn.addEventListener('click', () => backSpace('clear'))
@@ -77,22 +84,41 @@
 			requireSheet(selectedValue)
 		}
 
+		function changeOscStyle () {
+			let oscType = oscTypeSelect.options[oscTypeSelect.selectedIndex].value
+
+			EEditor.init({
+				node: '#sheetMusic',
+				oscType
+			})
+		}
+
 		async function requireSheet (name) {
 			try {
 				if (!name) return
-				$('#sheetMusic').innerHTML = ''
+				editor.innerHTML = ''
 				
 				let sheetData = await import(`./sheet/${name}.js`)
-				$('#sheetMusic').innerText = sheetData.default.trim()
+				editor.innerText = sheetData.default.trim()
 
-				EEditor.init('#sheetMusic')
+				let oscType = getOscType()
+
+				EEditor.init({
+					node: '#sheetMusic',
+					oscType
+				})
+
 			} catch (err) {
 				alert(err)
 			}
 		}
 
+		function getOscType () {
+			let formData = new FormData(bellForm)
+			return [...formData][0][1]
+		}
+
 		function backSpace (step) {
-			let editor = $('#sheetMusic')
 			if (step === 'last') {
 				editor.lastChild && editor.removeChild(editor.lastChild)
 			} else if (step === 'clear') {
@@ -103,8 +129,7 @@
 		function playEvent (ev) {
 			sheetMusic = $('#sheetMusic').innerText
 
-			let formData = new FormData(bellForm)
-			let oscType = [...formData][0][1]
+			let oscType = getOscType()
 
 			playAudio(sheetMusic, oscType)
 

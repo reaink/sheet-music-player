@@ -109,7 +109,7 @@ function insertBtns (notes, sheetSpan) {
       sheetSpan.setAttribute('data-sheet', note.toLocaleLowerCase())
       this.editor.appendChild(sheetSpan.cloneNode(true))
 
-      playAudio(note, 'sine')
+      playAudio(note, this.oscType)
 
       scrollBottom.call(this)
     })

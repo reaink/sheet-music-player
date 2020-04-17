@@ -25,15 +25,13 @@ function throttle(fn, gapTime) {
 }
 
 export default {
-  init (node) {
-    this.editor = document.querySelector(node)
+  init (data) {
+    this.editor = document.querySelector(data.node)
+    this.oscType = data.oscType
 
     this.__init()
   },
   __init () {
-    // this.editor.setAttribute('contentEditable', true)
-    this.editor.addEventListener('keyup', throttle(this.runfmt.bind(this), 800))
-
     this.runfmt()
     
     !plugInstalled && this.insPlgn()
@@ -53,9 +51,6 @@ export default {
   },
   fmtNote () {
     let sheetMusic = this.editor.innerText
-    
-    let muteReg = /(?<![n"])(\s|\-)(?=\S)/g
-    let muteRegMatched = sheetMusic.match(muteReg)
 
     // set noteClass
     for (let note of Object.keys(noteData)) {
@@ -67,6 +62,9 @@ export default {
         }
       }
     }
+    
+    let muteReg = /(?<![n"])(\s|\-)(?=\S)/g
+    let muteRegMatched = sheetMusic.match(muteReg)
 
     // set muteClass
     if (muteRegMatched) {
@@ -77,8 +75,9 @@ export default {
   },
   setSheetClass (note) {
     let reg = new RegExp(`${note}(?!</)`, 'g')
+    let matched = this.editor.innerHTML.match(reg)
     
-    if (this.editor.innerHTML.match(reg)) {
+    if (matched) {
       this.editor.innerHTML =
         this.editor.innerHTML.replace(reg, `<span class="s-n" data-sheet="${note.toLowerCase()}">${note}</span>`)
     }
@@ -86,8 +85,10 @@ export default {
   setMuteClass (note) {
     let regNote = note === '-' ? note : '\s'
     let attrNote = note === '-' ? 'dash' : 'space'
-    let reg = new RegExp(`(?<![n"])\\${regNote}(?!(\\<\\/|["dnsc]))`, 'g')
-    if (this.editor.innerHTML.match(reg)) {
+    let reg = new RegExp(`(?<![ns"])\\${regNote}(?!(\\<\\/|["dnsc]))`, 'g')
+    let matched = this.editor.innerHTML.match(reg)
+
+    if (matched) {
       this.editor.innerHTML =
         this.editor.innerHTML.replace(reg, `<span class="s-n s-m" data-sheet="${attrNote}">-</span>`)
     }

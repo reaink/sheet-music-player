@@ -1,19 +1,28 @@
+[disabled] {
+  background-color: #333 !important;
+  color: #ccc !important;
+  cursor: not-allowed !important;
+}
+
 .e-editor {
   margin: 5px 0;
   padding: 5px;
-  max-height: 60vh;
+  max-height: 45vh;
   min-height: 35vh;
+  overflow-y: auto;
   width: 100%;
   border-radius: 5px;
   border: 1px solid #ccc;
 }
 
 .s-n {
+  display: inline-block;
   margin: 2px;
   padding: 0 2px;
   border-radius: 3px;
   line-height: 1.5;
   color: white;
+  background: dimgray;
 }
 
 .e-editor:focus {

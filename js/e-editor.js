@@ -10,6 +10,7 @@ import noteData from './note-data.js'
 import eepInputSheet from './e-editor-plugin-input-sheet.js'
 
 const $ = document.querySelector.bind(document)
+let plugInstalled
 
 function throttle(fn, gapTime) {
   let _lastTime = null;
@@ -34,13 +35,15 @@ export default {
     this.editor.addEventListener('keyup', throttle(this.runfmt.bind(this), 800))
 
     this.runfmt()
-
-    this.insPlgn()
+    
+    !plugInstalled && this.insPlgn()
   },
   insPlgn () {
     this.extendsInstall(eepInputSheet({
       node: $('#input-sheet')
     }))
+    
+    plugInstalled = true
   },
   runfmt () {
     var selection = window.getSelection();

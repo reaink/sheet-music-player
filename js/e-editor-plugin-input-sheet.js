@@ -35,7 +35,6 @@ function createSharpFlatBtns () {
   let sharpBtn = document.createElement('button')
   sharpBtn.type = 'button'
   sharpBtn.innerText = '升Key'
-  sharpBtn.classList.add('s-n')
   sharpBtn.addEventListener('click', () => {
     changeBtnsSharp.call(this)
     checkBtnIsMax(sharpBtn, flatBtn)
@@ -44,7 +43,6 @@ function createSharpFlatBtns () {
   let flatBtn = document.createElement('button')
   flatBtn.type = 'button'
   flatBtn.innerText = '降Key'
-  flatBtn.classList.add('s-n')
   flatBtn.addEventListener('click', () => {
     changeBtnsFlat.call(this)
     checkBtnIsMax(sharpBtn, flatBtn)

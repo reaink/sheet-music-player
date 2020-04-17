@@ -32,9 +32,17 @@
 			</div>
 			<div class="e-editor" id="sheetMusic">C4C4G4G4A4A4G4-F4 F4 F4F4E4E4D4D4C4</div>
 			<div class="control-box">
-				<div class="sheet-controls-box" style="margin-bottom: 3px;">
-					<button id="backBtn" class="s-n" type="button">退格</button>
-					<button id="clearBtn" class="s-n" type="button">清空</button>
+				<div class="sheet-controls-box">
+					<button id="backBtn" type="button">退格</button>
+					<button id="clearBtn" type="button">清空</button>
+				</div>
+				<div class="sheet-controls-input-box">
+					<div>
+						播放音长/s: <input type="number" id="refPlayTime" placeholder="播放音长/s" value="1" readonly>
+					</div>
+					<div>
+						停止音长/s: <input type="number" id="refStopTime" placeholder="停止音长/s" value="1" readonly>
+					</div>
 				</div>
 				<div id="input-sheet"></div>
 			</div>
@@ -46,7 +54,8 @@
 				C4 D4 E4 F4 G4 A4 B4 <br>
 				do re mi fa sol la ti <br>
 				升降调 C♯4 D♭4 <br>
-				间隔时间时长用“空格”或“-”计算
+				间隔时间时长用“空格”或“-”计算 <br>
+				TIP：请使用谷歌浏览器打开本网页
 			</section>
 		</form>
 	</div>
@@ -64,6 +73,9 @@
 		const backBtn = $('#backBtn')
 		const clearBtn = $('#clearBtn')
 		const editor = $('#sheetMusic')
+
+		const refPlayTime = $('#refPlayTime')
+		const refStopTime = $('#refStopTime')
 		let sheetMusic = ''
 
 		addPlayEvent()
@@ -105,7 +117,11 @@
 
 				EEditor.init({
 					node: '#sheetMusic',
-					oscType
+					oscType,
+					time: {
+						playTime: +refPlayTime.value,
+						stopTime: +refStopTime.value
+					}
 				})
 
 			} catch (err) {
@@ -130,8 +146,12 @@
 			sheetMusic = $('#sheetMusic').innerText
 
 			let oscType = getOscType()
+			let time = {
+				playTime: +refPlayTime.value,
+				stopTime: +refStopTime.value
+			}
 
-			playAudio(sheetMusic, oscType)
+			playAudio(sheetMusic, oscType, time)
 
   		ev.preventDefault()
 		}

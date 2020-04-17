@@ -1,3 +1,9 @@
+button {
+  color: black;
+  border-radius: 3px;
+  margin: 3px;
+}
+
 [disabled] {
   background-color: #333 !important;
   color: #ccc !important;
@@ -30,7 +36,7 @@
   border-radius: 3px;
   line-height: 1.5;
   color: white;
-  background: dimgray;
+  background: #666;
 }
 
 .e-editor:focus {
@@ -65,6 +71,28 @@ $main-s-c: #325f58;
   }
 }
 
+.sheet-controls-box {
+  display: flex;
+  margin-bottom: 5px;
+}
+
+.sheet-controls-input-box {
+  margin-bottom: 5px;
+  display: flex;
+  flex-flow: row wrap;
+  > div {
+    width: 100%;
+  }
+  input {
+    max-width: 120px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    text-align: center;
+    + input {
+      margin-left: 5px;
+    }
+  }
+}
 
 $muteList: dash, space;
 $muteColor: #666;

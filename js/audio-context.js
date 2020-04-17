@@ -21,13 +21,14 @@ export default {
   },
 
   // 播放
-  ring(frequency, playTime, type) {
+  ring(frequency, type, time) {
     if (!frequency) return
-    this.__play(parseFloat(frequency), playTime, type)
+    this.__play(parseFloat(frequency), type, time)
   },
 
-  __play(frequency, playTime = 1, type) {
+  __play(frequency, type, { playTime, stopTime }) {
     this.__init__(type)
+
     this.oscillator.frequency.value = frequency
     this.gain.gain.setValueAtTime(0, AC.currentTime)
     this.gain.gain.linearRampToValueAtTime(playTime, AC.currentTime + .01);
@@ -35,6 +36,6 @@ export default {
     this.oscillator.start(AC.currentTime)
 
     this.gain.gain.exponentialRampToValueAtTime(0.001, AC.currentTime + playTime)
-    this.oscillator.stop(AC.currentTime + playTime);
+    this.oscillator.stop(AC.currentTime + stopTime);
   }
 }

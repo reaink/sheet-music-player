@@ -15,7 +15,7 @@ function initPlayConf () {
   playTimer && clearInterval(playTimer)
 }
 
-function translateNote (sheetMusic, playTime, oscType, interval = 500) {
+function translateNote (sheetMusic, oscType, time, interval = 500) {
   // 替换所有换行为空格
   sheetMusic = sheetMusic.replace(/\n/g, ' ')
 
@@ -42,13 +42,13 @@ function translateNote (sheetMusic, playTime, oscType, interval = 500) {
 
   // console.log(sheetMusic)
 
-  playTimer = setInterval(playAudioRing.bind(document, sheetMusic, playTime, oscType), interval)
+  playTimer = setInterval(playAudioRing.bind(document, sheetMusic, oscType, time), interval)
 }
 
-function playAudioRing (sheetMusic, playTime, oscType) {
+function playAudioRing (sheetMusic, oscType, time) {
   if (!sheetMusic[playIdx]) return
 
-  AC.ring(sheetMusic[playIdx], playTime, oscType)
+  AC.ring(sheetMusic[playIdx], oscType, time)
 
   if (playIdx < sheetMusic.length) {
     playIdx ++
@@ -76,17 +76,14 @@ function computedNoteMul (fre, mul) {
   return getScale()
 }
 
-export function playAudio (sheetMusic, oscType, interval) {
+export function playAudio (sheetMusic, oscType, time, interval) {
   sheetMusic = sheetMusic.trim()
   
   if (playTimer) {
     initPlayConf()
   }
-  // let interval = 500
-  /// ms
-  let playTime = 1
-  /// s
-  translateNote(sheetMusic, playTime, oscType, interval)
+  
+  translateNote(sheetMusic, oscType, time, interval)
 }
 
 export function stopAudio () {

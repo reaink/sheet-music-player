@@ -3,14 +3,10 @@
 
 http://nshu.gitee.io/sheet-music-player
 
-支持音名
+C4 D4 E4 F4 G4 A4 B4
 
-C1 - C8
+do re mi fa sol la ti
 
-升调支持写法 C#1 C♯1
-
-降调支持写法 D.1 D♭1
+升降调 C♯4 D♭4
 
 间隔时间时长用“空格”或“-”计算
-
-注意：每个音必须用 空格隔开

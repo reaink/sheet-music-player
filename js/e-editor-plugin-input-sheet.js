@@ -75,7 +75,7 @@ function changeBtnsFlat () {
 }
 
 function initBtns () {
-  let notes = Object.keys(noteData).filter(val => !val.match(/[#\.]/))
+  let notes = Object.keys(noteData)
   notes.push('-')
 
   let sheetSpan = document.createElement('span')

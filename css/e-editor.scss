@@ -56,13 +56,7 @@ $main-s-c: #325f58;
     .s-n[data-sheet='#{$i + $idx}'] {
       background-color: $snSheet;
     }
-    .s-n[data-sheet='#{$i + "#" + $idx}'] {
-      background-color: $snSheet
-    }
     .s-n[data-sheet='#{$i + "♯" + $idx}'] {
-      background-color: $snSheet
-    }
-    .s-n[data-sheet='#{$i + "." + $idx}'] {
       background-color: $snSheet
     }
     .s-n[data-sheet='#{$i + "♭" + $idx}'] {

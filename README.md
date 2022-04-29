@@ -1,7 +1,6 @@
 ## sheet-music-player
-使用AudioContext创建的一个可以读取音名的音乐播放器
 
-http://nshu.gitee.io/sheet-music-player
+使用AudioContext创建的一个可以读取音名的音乐播放器
 
 C4 D4 E4 F4 G4 A4 B4
 
